@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://fb.me/react-15.1.0.js"></script>
+    <script src="https://fb.me/react-dom-15.1.0.js"></script>
+    <script src="wad.js"></script>
+    <script src="intervals.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.1.1/chroma.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+  </head>
+  <style>
+  html{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                    not supported by any browser */
+  }
+  body{
+      background: #222;
+  }
+  .tone{
+      margin: 5px;
+      border-radius: 4px;
+      color: black;
+      background: #f5f5f5;
+      padding: 1em;
+      display: inline-block;
+      border: 6px solid rgba(0,0,0,.05);
+      cursor: pointer;
+      transition: .25s all;
+      width: 175px;
+      text-align: center;
+  }
+  .inner{
+    display: inline;
+    padding: 1em;
+    color: white;
+  }
+  .fa {
+      background: rgba(0,0,0,.1);
+        border-radius: 4px;
+        margin: .5em;
+        padding: .5em;
+  }
+  .ay:hover{
+      background: #eee;
+  }
+  </style>
+  <body>
+    <div id="example"></div>
+    <script type="text/babel" src="main.jsx">
+    </script>
+  </body>
+</html>
