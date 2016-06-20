@@ -1,0 +1,62 @@
+$icon-font-path: '../fonts/';
+
+// bower:scss
+@import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+// endbower
+
+html{
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+body{
+    background: #222;
+}
+.topToolbar{
+    background: #eee;
+    .time{
+        border-radius: 4px;
+        float: left;
+        width: 107px;
+        padding: .5em;
+        background: #333;
+        color: #ccc;
+        height: 55px;
+        line-height: 40px;
+        padding-left: 1em;
+        margin-right:1em
+    }
+    .info{
+        overflow: auto;
+        padding: .5em;
+        .controls{
+            width: auto;
+            margin: 0 auto;
+            font-size: 2em;
+            float:left;
+            .playButton{
+                padding:.5em;
+                border-radius: 4px;
+                &:hover{
+                    background:#e5e5e5;
+                }
+                &:active{
+                    background:#d5d5d5;
+                }
+            }
+        }
+    }
+    .timeline{
+        padding: .5em;
+        background: #e5e5e5;
+    }
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+
+}
