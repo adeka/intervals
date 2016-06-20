@@ -27,12 +27,19 @@ body{
         color: #ccc;
         height: 55px;
         line-height: 40px;
-        padding-left: 1em;
+        padding-left: 1.2em;
         margin-right:1em
+    }
+    .tinyTime{
+        color: #ccc;
+        font-size: 7px;
+        position: relative;
+        bottom: 23px;
+        left: 1px;
     }
     .info{
         overflow: auto;
-        padding: .5em;
+        padding: .6em;
         .controls{
             width: auto;
             margin: 0 auto;
@@ -53,6 +60,28 @@ body{
     .timeline{
         padding: .5em;
         background: #e5e5e5;
+        height: 47px;
+        .playhead{
+            font-size:2em;
+            position: relative;
+        }
+        .scrubber{
+            position: absolute;
+            left: 0;
+        }
+        .timescale{
+            height: 21px;
+            background: #ddd;
+            position: relative;
+            top: 19px;
+            border-top: 1px solid #ccc;
+            .tick{
+                height: 20px;
+                width: 1px;
+                background: #999;
+                position: absolute;
+            }
+        }
     }
 }
 
