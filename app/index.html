@@ -32,9 +32,7 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.1.1/chroma.min.js"></script>
-
     <script src="vendor/wad.js"></script>
 
   </head>
@@ -52,7 +50,18 @@
     <!-- endbuild -->
 
     <div id="example"></div>
-    <script type="text/babel" src="scripts/main.jsx">
+
+    <script type="text/babel" src="scripts/main.jsx"></script>
+    <script type="text/babel" src="scripts/sequencer.jsx"></script>
+    <script type="text/babel" src="scripts/panels.jsx"></script>
+    <script type="text/babel">
+    import {SoundApp} from './main.jsx';
+    setTimeout(function(){
+        ReactDOM.render(
+            <SoundApp />,
+            document.getElementById('example')
+        );
+    }, 2000);
     </script>
 
     <!-- build:js scripts/plugins.js -->

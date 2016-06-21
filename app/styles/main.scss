@@ -58,11 +58,10 @@ body{
         }
     }
     .timelineContainer{
-      height: 500px;
+      height: 600px;
       background: #e5e5e5;
       .timeline{
         position: relative;
-        left: 5em;
           padding: .5em;
           background: #e5e5e5;
           height: 47px;
@@ -70,51 +69,74 @@ body{
               font-size:2em;
               position: relative;
           }
-          .scrubber{
-              position: absolute;
-              left: 0;
+          .scrubberPad{
+              @include make-lg-column(2);
+
           }
-          .timescale{
-              height: 20px;
-              background: #ddd;
-              position: relative;
-              top: 20px;
-              border-top: 1px solid #ccc;
-              z-index:0;
-              .note{
-                background: rgba(255, 160, 0, .7);
-                height: 20px;
-                position: absolute;
-                z-index: 99;
-                &:hover{
-                  background: rgba(255, 160, 0, 1);
-                }
+          .scrubber{
+              @include make-lg-column(10);
+              padding: 0;
+          }
+          .track{
+              @include make-row();
+              .info{
+                @include make-lg-column(2);
               }
-              .bigTick{
-                  height: 20px;
-                  bottom:.1px;
-                  border-left: 1px solid #333;
-                  position: absolute;
-                  &:hover{
-                    background: rgba(130,200,220,.3);
+              .lanes{
+                  @include make-lg-column(10);
+                  .timescale{
+                      height: 20px;
+                      background: #ddd;
+                      position: relative;
+                      border-top: 1px solid rgba(0,0,0,.05);
+                      z-index:0;
+                      .playhead{
+                          width:1px;
+                          height: 20px;
+                          bottom:1px;
+                          z-index: 99;
+                          position: absolute;
+                          background: #333;
+                          -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+                          -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+                           box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+                      }
+                      .note{
+                        background: rgba(255, 160, 0, .7);
+                        height: 20px;
+                        position: absolute;
+                        z-index: 99;
+                        &:hover{
+                          background: rgba(255, 160, 0, 1);
+                        }
+                      }
+                      .bigTick{
+                          height: 20px;
+                          bottom:.1px;
+                          border-left: 1px solid #333;
+                          position: absolute;
+                          &:hover{
+                            background: rgba(130,200,220,.3);
+                          }
+                      }
+                      .tick{
+                          height: 20px;
+                          border-left: 1px solid #999;
+                          bottom:.1px;
+                          position: absolute;
+                          &:hover{
+                            background: rgba(130,200,220,.3);
+                          }
+                      }
+                      .subTick{
+                        position: absolute;
+                        height: 20px;
+                        border-left: 1px solid #ccc;
+                        &:hover{
+                          background: rgba(130,200,220,.3);
+                        }
+                      }
                   }
-              }
-              .tick{
-                  height: 20px;
-                  border-left: 1px solid #999;
-                  bottom:.1px;
-                  position: absolute;
-                  &:hover{
-                    background: rgba(130,200,220,.3);
-                  }
-              }
-              .subTick{
-                position: absolute;
-                height: 20px;
-                border-left: 1px solid #ccc;
-                &:hover{
-                  background: rgba(130,200,220,.3);
-                }
               }
           }
       }
