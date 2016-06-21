@@ -57,40 +57,64 @@ body{
             }
         }
     }
-    .timeline{
-        padding: .5em;
-        background: #e5e5e5;
-        height: 47px;
-        .playhead{
-            font-size:2em;
-            position: relative;
-        }
-        .scrubber{
-            position: absolute;
-            left: 0;
-        }
-        .timescale{
-            height: 21px;
-            background: #ddd;
-            position: relative;
-            top: 19px;
-            border-top: 1px solid #ccc;
-            .tick{
+    .timelineContainer{
+      height: 500px;
+      background: #e5e5e5;
+      .timeline{
+        position: relative;
+        left: 5em;
+          padding: .5em;
+          background: #e5e5e5;
+          height: 47px;
+          .playhead{
+              font-size:2em;
+              position: relative;
+          }
+          .scrubber{
+              position: absolute;
+              left: 0;
+          }
+          .timescale{
+              height: 21px;
+              background: #ddd;
+              position: relative;
+              top: 19px;
+              border-top: 1px solid #ccc;
+              .note{
+                background: rgb(255, 160, 0);
                 height: 20px;
-                border-left: 1px solid #999;
                 position: absolute;
-
-                .subTick{
-                  position: absolute;
+                border: 1px solid rgba(0,0,0,.1);
+                z-index: 99;
+              }
+              .bigTick{
                   height: 20px;
-                  border-left: 1px solid #ccc;
+                  border-left: 1px solid #333;
+                  position: absolute;
                   &:hover{
                     background: rgba(130,200,220,.1);
                   }
+              }
+              .tick{
+                  height: 20px;
+                  border-left: 1px solid #999;
+                  position: absolute;
+                  &:hover{
+                    background: rgba(130,200,220,.1);
+                  }
+              }
+              .subTick{
+                position: absolute;
+                height: 20px;
+                border-left: 1px solid #ccc;
+                &:hover{
+                  background: rgba(130,200,220,.1);
                 }
-            }
-        }
+              }
+          }
+      }
     }
+
 }
 
 /* Responsive: Portrait tablets and up */
