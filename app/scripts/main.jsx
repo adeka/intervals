@@ -120,7 +120,8 @@ class Notelane extends React.Component {
         },
         time : time,
         duration: duration
-      })
+        });
+        this.forceUpdate();
     }
     render() {
 
@@ -165,7 +166,7 @@ class Notelane extends React.Component {
                     return <Note pitch={self.props.pitch} playing={self.props.playing} duration={result.duration} time={result.time} elapsed={self.props.elapsed} left={left} width={width} style={result.style} />;
                 })}
                 {ticks.map(function(result) {
-                    return <Bar className={result.cName} time={result.time} addNote={self.addNote} width={result.width} duration={self.timeScale(barLength)} style={result.style} key={(result.style.left+'').hashCode()}/>;
+                    return <Bar className={result.cName} time={result.time} addNote={self.addNote} width={result.width} duration={self.timeScale(barLength)} style={result.style} />;
                 })}
             </div>
         );
@@ -178,12 +179,28 @@ class Note extends React.Component {
         this.saw = new Wad({
             source : 'sawtooth',
         });
-        // this.state = {
-        // };
+        this.state = {
+            playing: false
+        };
+        this.checkForPlay = this.checkForPlay.bind(this);
+        setInterval(this.checkForPlay, 10);
+    }
+    checkForPlay(){
+        if(this.props.elapsed >= this.props.time && this.props.playing && !this.state.playing){
+          this.play();
+          this.setState({playing : true});
+        }
+        if(!this.props.playing){
+          this.stop();
+          this.setState({playing : false});
+        }
+        if(this.saw.gain.length < 1){
+            this.setState({playing : false});
+        }
     }
     play(){
       this.saw.play({
-          volume  : .8,
+          volume  : .7,
           wait    : 0,     // Time in seconds between calling play() and actually triggering the note.
           loop    : false, // This overrides the value for loop on the constructor, if it was set.
           pitch   : this.props.pitch,
@@ -204,12 +221,7 @@ class Note extends React.Component {
       }
     }
     render() {
-      if(this.props.elapsed == this.props.time && this.props.playing){
-        this.play();
-      }
-      if(!this.props.playing){
-        this.stop();
-      }
+
     //  console.log(elapsed + " " + this.prop.);
       $(this.refs.self).css("left", this.props.left);
       $(this.refs.self).width(this.props.width);
