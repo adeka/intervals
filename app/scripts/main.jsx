@@ -108,24 +108,31 @@ class Timeline extends React.Component {
     }
     render() {
         var w = $(this.refs.timeline).width();
-        var tickCount = 40;
-        var timeScale = d3.scale.linear().domain([this.state.start, this.state.end]).range([0, w]);
-        var tickScale = d3.scale.linear().domain([0, tickCount]).range([0, w]);
+        var bpm = 120;
+        var meter = {top: 4, bottom: 4};
+        var measureLength = (meter.top / (bpm / 60))*10;
+        var timeScale = d3.scale.linear().domain([0, this.state.end]).range([0, w]);
+        // var tickScale = d3.scale.linear().domain([0, tickCount]).range([0, w]);
         $(this.refs.playhead).css("left", timeScale(this.props.elapsed));
+
         var ticks = [];
-        for(var i = 0; i< tickCount; i++){
-            var h;
-            if(i % 4 == 0){
-                h = 20;
-            }
-            else{
-                h = 10;
-            }
+        var barBuilder = 0;
+        for(var i = 0; i< this.state.end; i+= measureLength){
+            var h = 20;
+            //
+            // if(i % 4 == 0){
+            //     h = 20;
+            // }
+            // else{
+            //     h = 10;
+            // }
             var tick = {
-                left : tickScale(i),
-                height: h
+                left : timeScale(barBuilder)+"px",
+                height: h,
+                width: timeScale(measureLength)+"px"
             }
             ticks.push(tick);
+            barBuilder += measureLength;
         }
         return(
             <div ref="timeline" className="timeline">
@@ -135,13 +142,37 @@ class Timeline extends React.Component {
                 <div className="timescale">
                 {ticks.map(function(result) {
                   //var left = result["left"];
-                  return <div className="tick" style={result} key={result.left+"".hashCode()}/>;
+                    return <Bar subs={4} duration={timeScale(measureLength)} style={result} key={(result.left+'').hashCode()}/>;
+
                   //return <Pitch ratio={ratio} details={details} key={ratio.hashCode()}/>;
                 })}
                 </div>
             </div>
         );
     }
+}
+
+class Bar extends React.Component {
+  constructor() {
+    super();
+  }
+  render(){
+    //this is fucking retarded haha
+    var subs = [];
+    for(var i = 0; i < this.props.subs; i++){
+      subs.push({
+        left : ((this.props.duration / this.props.subs) * i )+"px"
+      });
+    }
+    //this is some fuckin php shit
+    return (
+      <div className="tick" style={this.props.style}>
+      {subs.map(function(result) {
+        return <div className="subTick" style={result}/>;
+      })}
+      </div>
+    );
+  }
 }
 
 class Toolbar extends React.Component {
