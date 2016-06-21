@@ -1,20 +1,10 @@
-
-
 class xxx extends React.Component {
     constructor() {
         super();
         this.state = {
         };
     }
-    componentDidMount() {
-
-    }
-    componentWillUnmount() {
-
-    }
-
     render() {
-
     }
 }
 
@@ -102,7 +92,7 @@ class Sequencer extends React.Component {
 }
 
 class Notelane extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
         this.state = {
             start : 0,
@@ -110,31 +100,16 @@ class Notelane extends React.Component {
         };
         this.notes = [];
         this.addNote = this.addNote.bind(this);
-
-    }
-    addNote(time, duration){
-      this.notes.push({
-        style : {
-          width: this.timeScale(duration),
-          left: this.timeScale(time)
-        },
-        time : time,
-        duration: duration
-        });
-        this.forceUpdate();
-    }
-    render() {
-
-        this.timeScale = d3.scale.linear().domain([0, this.state.end]).range([0, this.props.w]);
-
-        var subs = 4;
+        this.timeScale = d3.scale.linear().domain([0, this.state.end]).range([0, props.w]);
+        console.log(props);
+        var subs = 8;
         var bpm = 120;
         var meter = {top: 4, bottom: 4};
         var measureLength = (meter.top / (bpm / 60))*10;
-        var barLength = (meter.top / (bpm / 60))*10 / subs;
-        var ticks = [];
+        this.barLength = (meter.top / (bpm / 60))*10 / subs;
+        this.ticks = [];
         var barBuilder = 0;
-        for(var i = 0; i< this.state.end; i+= barLength){
+        for(var i = 0; i< this.state.end; i+= this.barLength){
             var cName;
             if(Math.floor(i % (measureLength*meter.bottom)) ==  0){
               cName = "bigTick";
@@ -149,14 +124,27 @@ class Notelane extends React.Component {
             var tick = {
               style : {
                 left : this.timeScale(i)+"px",
-                width: this.timeScale(barLength)+"px"
+                width: this.timeScale(this.barLength)+"px"
               },
-              width : barLength,
+              width : this.barLength,
               cName : cName,
               time : i
             }
-            ticks.push(tick);
+            this.ticks.push(tick);
         }
+    }
+    addNote(time, duration){
+      this.notes.push({
+        style : {
+          width: this.timeScale(duration),
+          left: this.timeScale(time)
+        },
+        time : time,
+        duration: duration
+        });
+        this.forceUpdate();
+    }
+    render() {
         var self = this;
         return(
             <div ref="timeline" className="timescale">
@@ -165,8 +153,8 @@ class Notelane extends React.Component {
                     var width = self.timeScale(result.duration);
                     return <Note pitch={self.props.pitch} playing={self.props.playing} duration={result.duration} time={result.time} elapsed={self.props.elapsed} left={left} width={width} style={result.style} />;
                 })}
-                {ticks.map(function(result) {
-                    return <Bar className={result.cName} time={result.time} addNote={self.addNote} width={result.width} duration={self.timeScale(barLength)} style={result.style} />;
+                {this.ticks.map(function(result) {
+                    return <Bar className={result.cName} time={result.time} addNote={self.addNote} width={result.width} duration={self.timeScale(self.barLength)} style={result.style} />;
                 })}
             </div>
         );
@@ -221,8 +209,6 @@ class Note extends React.Component {
       }
     }
     render() {
-
-    //  console.log(elapsed + " " + this.prop.);
       $(this.refs.self).css("left", this.props.left);
       $(this.refs.self).width(this.props.width);
         return (
@@ -256,8 +242,8 @@ class Toolbar extends React.Component {
         };
         this.tick = this.tick.bind(this);
         this.playTimeline = this.playTimeline.bind(this);
-    }
-    componentDidMount() {
+        this.w = $(this.refs.panel).width();
+
     }
     playTimeline(playing) {
         //console.log("playing: " + playing);
@@ -274,15 +260,12 @@ class Toolbar extends React.Component {
 
         }
     }
-    componentWillUnmount() {
-    }
     tick() {
       var time = new Date().getTime() - this.start;
       var elapsed = Math.floor(time / 100) ;
       this.setState({elapsed: elapsed});
     }
     render() {
-      var w = $(this.refs.panel).width();
       return (
            <div className="topToolbar">
                <div ref="panel" className="info">
@@ -291,7 +274,7 @@ class Toolbar extends React.Component {
                         <PlayButton playTimeline={this.playTimeline} />
                    </div>
                 </div>
-                <Sequencer w={w} playing={this.state.playing} elapsed={this.state.elapsed}/>
+                <Sequencer w={2000} playing={this.state.playing} elapsed={this.state.elapsed}/>
            </div>
       );
     }
@@ -307,16 +290,10 @@ class SoundApp extends React.Component {
        $(document.body).on('keypress', this.onKeyDown);
        $(document.body).on('keyup', this.onKeyUp);
     }
-    componentWillUnmount() {
-    }
-
     onKeyUp(e){
-
     }
     onKeyDown(e){
-
     }
-
     render() {
       return (
           <div>
@@ -325,9 +302,7 @@ class SoundApp extends React.Component {
       );
     }
 }
-setInterval(function() {
-    ReactDOM.render(
-        <SoundApp />,
-        document.getElementById('example')
-    );
-}, 500);
+ReactDOM.render(
+    <SoundApp />,
+    document.getElementById('example')
+);
