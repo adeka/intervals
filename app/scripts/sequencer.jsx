@@ -100,7 +100,7 @@ class Track extends React.Component {
 
     for(var i=0; i<24; i++){
         this.scale.push(fundamental);
-        fundamental = fundamental * Math.pow(2, 1/12);
+        fundamental = fundamental * Math.pow(2, 1/23);
     }
     this.scale.reverse();
   }
