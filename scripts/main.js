@@ -1,0 +1,1 @@
+"use strict";String.prototype.hashCode=function(){var t,r,e,h=0;if(0===this.length)return h;for(t=0,e=this.length;e>t;t++)r=this.charCodeAt(t),h=(h<<5)-h+r,h|=0;return h};
