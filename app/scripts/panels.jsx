@@ -24,7 +24,7 @@ class TimeDisplay extends React.Component {
         super();
     }
     render() {
-        var ms = this.props.elapsed % 10 + "0";
+        var ms = (Math.floor(this.props.elapsed) % 10 + "0").substring(0,2);
         var s = Math.floor(this.props.elapsed / 10) % 60;
         if(s < 10){
             s = "0" + s;
@@ -49,10 +49,12 @@ class Toolbar extends React.Component {
         super();
         this.state = {
             elapsed : 0,
+            oldElapsed : 0,
             stopped : true,
             playing : false
         };
         this.tick = this.tick.bind(this);
+        this.scrub = this.scrub.bind(this);
         this.playTimeline = this.playTimeline.bind(this);
         this.w = $(this.refs.panel).width();
 
@@ -67,15 +69,24 @@ class Toolbar extends React.Component {
         }
         else{
             clearInterval(this.interval);
-            this.setState({elapsed: 0});
+            this.setState({oldElapsed : this.state.elapsed});
+            //this.setState({elapsed: 0});
             this.setState({playing : false});
-
         }
     }
     tick() {
       var time = new Date().getTime() - this.start;
-      var elapsed = Math.floor(time / 100) ;
+      if(this.state.stopped){
+        var elapsed = Math.floor(time / 100) ;
+      }
+      else{
+        var elapsed = this.state.oldElapsed + Math.floor(time / 100) ;
+      }
       this.setState({elapsed: elapsed});
+    }
+    scrub(p){
+      this.setState({elapsed: p});
+      this.setState({oldElapsed: p});
     }
     render() {
       return (
@@ -86,7 +97,7 @@ class Toolbar extends React.Component {
                         <PlayButton playTimeline={this.playTimeline} />
                    </div>
                 </div>
-                <Sequencer w={2000} playing={this.state.playing} elapsed={this.state.elapsed}/>
+                <Sequencer scrub={this.scrub} w={2000} playing={this.state.playing} elapsed={this.state.elapsed}/>
            </div>
       );
     }

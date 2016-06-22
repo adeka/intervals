@@ -22,18 +22,15 @@
     <script src="/bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-
-    <script src="https://fb.me/react-15.1.0.js"></script>
-    <script src="https://fb.me/react-dom-15.1.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
-
 
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.1.1/chroma.min.js"></script>
     <script src="vendor/wad.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+
+
 
   </head>
   <body>
@@ -46,23 +43,15 @@
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/react/react.js"></script>
+    <script src="/bower_components/react/react-dom.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <div id="example"></div>
-
-    <script type="text/babel" src="scripts/main.jsx"></script>
-    <script type="text/babel" src="scripts/sequencer.jsx"></script>
-    <script type="text/babel" src="scripts/panels.jsx"></script>
-    <script type="text/babel">
-    import {SoundApp} from './main.jsx';
-    setTimeout(function(){
-        ReactDOM.render(
-            <SoundApp />,
-            document.getElementById('example')
-        );
-    }, 2000);
-    </script>
+    <script src="scripts/panels.js"></script>
+    <script src="scripts/sequencer.js"></script>
+    <script src="scripts/app.js"></script>
 
     <!-- build:js scripts/plugins.js -->
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/affix.js"></script>

@@ -20,6 +20,12 @@ class SoundApp extends React.Component {
       );
     }
 }
+
+ReactDOM.render(
+    <SoundApp />,
+    document.getElementById('example')
+);
+
 class xxx extends React.Component {
     constructor() {
         super();

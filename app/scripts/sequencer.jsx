@@ -3,21 +3,49 @@ class Sequencer extends React.Component {
         super();
         this.state = {
             start : 0,
-            end: 300
+            end: 300,
+            scrubbing: false
         };
+        this.startDrag = this.startDrag.bind(this);
+        this.stopDrag = this.stopDrag.bind(this);
+        this.drag = this.drag.bind(this);
+    }
+    startDrag(e){
+      this.setState({scrubbing: true});
+    }
+    stopDrag(e){
+      this.setState({scrubbing: false});
+    }
+    drag(e){
+      if(this.state.scrubbing){
+        //console.log(e.clientX);
+        if(e.clientX > 220){
+          var p = this.reverseTimeScale(e.clientX - 220);
+          this.props.scrub(p);
+        }
+        else{
+          this.props.scrub(0);
+          e.stopPropagation();
+        }
+      }
     }
     render() {
         this.timeScale = d3.scale.linear().domain([0, this.state.end]).range([0, this.props.w]);
+        this.reverseTimeScale = d3.scale.linear().domain([0, this.props.w]).range([0, this.state.end]);
+
         $(this.refs.playhead).css("left", this.timeScale(this.props.elapsed));
 
         return(
-            <div className="timelineContainer">
+            <div className="timelineContainer" onMouseUp={this.stopDrag} onMouseMove={this.drag}>
                 <div className="timeline">
                     <div className="scrubberPad" />
                     <div className="scrubber">
-                        <div ref="playhead" className="playhead fa fa-caret-down" />
+                        <div ref="playhead"
+                              className="playhead fa fa-caret-down" onMouseDown={this.startDrag}>
+                            <div ref="playheadHandle" className="playheadHandle" />
+                        </div>
                     </div>
-                    <Track w={this.props.w} playing={this.props.playing} elapsed={this.props.elapsed} />
+                    <Track name={"track_1"} w={this.props.w} playing={this.props.playing} elapsed={this.props.elapsed} />
                 </div>
             </div>
         );
@@ -31,9 +59,9 @@ class Track extends React.Component {
     }
     var fundamental = 261.626;
     this.scale = [];
-    for(var i=0; i<25; i++){
+    for(var i=0; i<24; i++){
         this.scale.push(fundamental);
-        fundamental = fundamental * Math.pow(2, 1/23);
+        fundamental = fundamental * Math.pow(2, 1/12);
     }
     this.scale.reverse();
   }
@@ -42,7 +70,9 @@ class Track extends React.Component {
     var self = this;
     return (
         <div className="track">
-        <div className="info" />
+        <div className="infoBox">
+        {this.props.name}
+        </div>
         <div className="lanes">
             {this.scale.map(function(result) {
                 return <Notelane pitch={result} w={self.props.w} playing={self.props.playing} elapsed={self.props.elapsed}/>;
@@ -59,10 +89,11 @@ class Notelane extends React.Component {
         super();
         this.state = {
             start : 0,
-            end: 300
+            end: 300,
+            notes : []
         };
-        this.notes = [];
         this.addNote = this.addNote.bind(this);
+        this.removeNote = this.removeNote.bind(this);
         this.timeScale = d3.scale.linear().domain([0, this.state.end]).range([0, props.w]);
 
         var subs = 2;
@@ -97,7 +128,8 @@ class Notelane extends React.Component {
         }
     }
     addNote(time, duration){
-      this.notes.push({
+      var notes = this.state.notes;
+        notes.push({
         style : {
           width: this.timeScale(duration),
           left: this.timeScale(time)
@@ -105,7 +137,21 @@ class Notelane extends React.Component {
         time : time,
         duration: duration
         });
-        this.forceUpdate();
+        this.setState({
+          notes : notes
+        });
+    }
+    removeNote(time){
+      var notes = this.state.notes;
+      var self = this;
+
+      notes = _.reject(notes, function(item, index, list){
+        return item.time == time;
+      });
+      this.setState({
+        notes : notes
+      });
+      //this.forceUpdate();
     }
     render() {
         var self = this;
@@ -113,10 +159,10 @@ class Notelane extends React.Component {
         return(
             <div ref="timeline" className="timescale">
                 <div className="playhead" ref="playhead" />
-                {this.notes.map(function(result) {
+                {this.state.notes.map(function(result) {
                     var left = self.timeScale(result.time);
                     var width = self.timeScale(result.duration);
-                    return <Note pitch={self.props.pitch} playing={self.props.playing} duration={result.duration} time={result.time} elapsed={self.props.elapsed} left={left} width={width} style={result.style} />;
+                    return <Note removeNote={self.removeNote} pitch={self.props.pitch} playing={self.props.playing} duration={result.duration} time={result.time} elapsed={self.props.elapsed} left={left} width={width} style={result.style} />;
                 })}
                 {this.ticks.map(function(result) {
                     return <Bar className={result.cName} time={result.time} addNote={self.addNote} width={result.width} duration={self.timeScale(self.barLength)} style={result.style} />;
@@ -144,7 +190,6 @@ class Bar extends React.Component {
   }
   mouseDrag(){
       if(this.state.drawing){
-
           console.log(this.state.length);
       }
   }
@@ -164,17 +209,22 @@ class Bar extends React.Component {
 class Note extends React.Component {
     constructor() {
         super();
-        this.saw = new Wad({
-            source : 'sawtooth',
-        });
+        // this.saw = new Wad({
+        //     source : 'sawtooth',
+        // });
+        this.saw = new Wad({source : 'square'});
+        //this.saw = new Wad({source : 'samples/piano.wav'});
         this.state = {
             playing: false
         };
         this.checkForPlay = this.checkForPlay.bind(this);
-        setInterval(this.checkForPlay, 10);
+        this.handleClick = this.handleClick.bind(this);
+        this.listener = setInterval(this.checkForPlay, 10);
+        this.ready = true;
     }
     checkForPlay(){
-        if(this.props.elapsed >= this.props.time && this.props.playing && !this.state.playing){
+      if(this.ready){
+        if((this.props.elapsed - this.props.time < 5 && this.props.elapsed - this.props.time >= 0) && this.props.playing && !this.state.playing){
           this.play();
           this.setState({playing : true});
         }
@@ -185,22 +235,45 @@ class Note extends React.Component {
         if(this.saw.gain.length < 1){
             this.setState({playing : false});
         }
+      }
+    }
+    componentDidMount(){
+      this.play();
+      this.setState({playing : true});
+    }
+    componentWillUnmount() {
+      console.log("ay");
+      clearInterval(this.listener);
+      this.ready = false;
+    }
+    handleClick(){
+      clearInterval(this.listener);
+      this.props.removeNote(this.props.time);
     }
     play(){
       this.saw.play({
-          volume  : .7,
+          volume  : .8,
           wait    : 0,     // Time in seconds between calling play() and actually triggering the note.
           loop    : false, // This overrides the value for loop on the constructor, if it was set.
           pitch   : this.props.pitch,
           label   : 'A',   // A label that identifies this note.
-          env     : {      // This is the ADSR envelope.
-              attack  : 0.1,  // Time in seconds from onset to peak volume.  Common values for oscillators may range from 0.05 to 0.3.
-              decay   : 0.0,  // Time in seconds from peak volume to sustain volume.
-              sustain : 1.0,  // Sustain volume level. This is a percent of the peak volume, so sensible values are between 0 and 1.
-              hold    : this.props.duration / 10, // Time in seconds to maintain the sustain volume level. If this is not set to a lower value, oscillators must be manually stopped by calling their stop() method.
-              release : .1     // Time in seconds from the end of the hold period to zero volume, or from calling stop() to zero volume.
+          panning : [1, -1, 10],
+          env : {
+              attack : .05,
+              decay : .1,
+              sustain : .2,
+              hold : this.props.duration/10,
+              release : .3
           },
-          panning : [1, -1, 10]
+          filter : {
+              type : 'lowpass',
+              frequency : 1200,
+              q : 8.5,
+              env : {
+                  attack : .2,
+                  frequency : 600
+              }
+          }
       });
     }
     stop(){
@@ -212,7 +285,7 @@ class Note extends React.Component {
       $(this.refs.self).css("left", this.props.left);
       $(this.refs.self).width(this.props.width);
         return (
-            <div ref="self" style={this.props.style} className="note"></div>
+            <div ref="self" style={this.props.style} className="note" onDoubleClick={this.handleClick}></div>
         );
     }
 }
