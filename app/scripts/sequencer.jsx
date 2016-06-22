@@ -19,8 +19,9 @@ class Sequencer extends React.Component {
     drag(e){
       if(this.state.scrubbing){
         //console.log(e.clientX);
-        if(e.clientX > 220){
-          var p = this.reverseTimeScale(e.clientX - 220);
+        var pad = $(this.refs.scrubberPad).width();
+        if(e.clientX > pad){
+          var p = this.reverseTimeScale(e.clientX - pad);
           this.props.scrub(p);
         }
         else{
@@ -36,13 +37,31 @@ class Sequencer extends React.Component {
         $(this.refs.playhead).css("left", this.timeScale(this.props.elapsed));
 
         return(
-            <div className="timelineContainer" onMouseUp={this.stopDrag} onMouseMove={this.drag}>
+            <div className="timelineContainer" onMouseUp={this.stopDrag} onMouseMove={this.drag} onMouseLeave={this.stopDrag}>
+                <div className="toolsContainer">
+                    <div className="toolsPad" />
+                    <div className="tools">
+                        <div className="divider" />
+                        <div className="fa fa-pencil" />
+                        <div className="fa fa-eraser" />
+                        <div className="fa fa-mouse-pointer" />
+                        <div className="divider" />
+                        <div className="fraction"> 1/1 </div>
+                        <div className="fraction"> 1/2 </div>
+                        <div className="fraction"> 1/4 </div>
+                        <div className="fraction"> 1/8 </div>
+                        <div className="fraction"> 1/16 </div>
+                    </div>
+                </div>
                 <div className="timeline">
-                    <div className="scrubberPad" />
-                    <div className="scrubber">
-                        <div ref="playhead"
-                              className="playhead fa fa-caret-down" onMouseDown={this.startDrag}>
-                            <div ref="playheadHandle" className="playheadHandle" />
+                    <div ref="scrubberPad" className="scrubberPad" />
+                    <div className="scrubber" >
+                        <div className="playheadWrap">
+                            <div ref="playhead"
+                                  className="playhead fa fa-caret-down" onMouseDown={this.startDrag}>
+                                <div ref="playheadHandle" className="playheadHandle">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <Track name={"track_1"} w={this.props.w} playing={this.props.playing} elapsed={this.props.elapsed} />
@@ -58,7 +77,27 @@ class Track extends React.Component {
     this.state = {
     }
     var fundamental = 261.626;
+    this.fixedScale = [
+        1/1,
+        33/32,
+        9/8,
+        7/6,
+        5/4,
+        21/16,
+        11/8,
+        3/2,
+        99/64,
+        27/16,
+        7/4,
+        15/8,
+        2/1,
+    ]
     this.scale = [];
+
+    // for(var i=0; i<this.fixedScale.length; i++){
+    //     this.scale.push(fundamental * this.fixedScale[i]);
+    // }
+
     for(var i=0; i<24; i++){
         this.scale.push(fundamental);
         fundamental = fundamental * Math.pow(2, 1/12);
@@ -96,7 +135,7 @@ class Notelane extends React.Component {
         this.removeNote = this.removeNote.bind(this);
         this.timeScale = d3.scale.linear().domain([0, this.state.end]).range([0, props.w]);
 
-        var subs = 2;
+        var subs = 4;
         var bpm = 120;
         var meter = {top: 4, bottom: 4};
         var measureLength = (meter.top / (bpm / 60))*10;
@@ -224,7 +263,7 @@ class Note extends React.Component {
     }
     checkForPlay(){
       if(this.ready){
-        if((this.props.elapsed - this.props.time < 5 && this.props.elapsed - this.props.time >= 0) && this.props.playing && !this.state.playing){
+        if((this.props.elapsed - this.props.time < 5 && this.props.elapsed - this.props.time > 0) && this.props.playing && !this.state.playing){
           this.play();
           this.setState({playing : true});
         }

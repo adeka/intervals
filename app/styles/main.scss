@@ -19,17 +19,19 @@ body{
 .topToolbar{
     background: #eee;
     .time{
-        border-radius: 4px;
-        float: left;
-        width: 107px;
-        padding: .5em;
-        background: #333;
-        color: #ccc;
-        height: 55px;
-        line-height: 40px;
-        padding-left: 1.2em;
-        margin-right:1em
-    }
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            float: left;
+            width: 107px;
+            padding: .5em;
+            background: #333;
+            color: #ccc;
+            height: 55px;
+            line-height: 36px;
+            padding-left: 1.2em;
+            margin-right:1em;
+            background: linear-gradient(#595959 0%, #666666 7%, #474747 16%, #2c2c2c 26%, #2c2c2c 26%, #000000 38%, #131313 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        }
     .tinyTime{
         color: #ccc;
         font-size: 7px;
@@ -60,21 +62,79 @@ body{
     .timelineContainer{
       height: 600px;
       background: #e5e5e5;
+      .toolsContainer{
+          padding: 0;
+          height: 40px;
+          background: #eaeaea;
+          border-bottom: 1px solid #ccc;
+
+          .tools{
+              @include make-lg-column(10);
+              padding: 0;
+              position: relative;
+              right: 10px;
+              .fa{
+                  cursor: pointer;
+                  font-size: 1.2em;
+                  padding: .7em;
+                  border-radius: 4px;
+                  float: left;
+                  &:hover{
+                      background:#e5e5e5;
+                  }
+              }
+              .divider{
+                  height: 40px;
+                  float:left;
+                  border-right: 1px solid #f5f5f5;
+                  border-left: 1px solid #ccc;
+              }
+              .fraction {
+                  cursor: pointer;
+                  float: left;
+                  padding: .7em;
+                  &:hover{
+                      background:#e5e5e5;
+                  }
+              }
+          }
+          .toolsPad{
+              @include make-lg-column(2);
+              padding: 0;
+
+          }
+      }
       .timeline{
         position: relative;
           background: #e5e5e5;
           height: 47px;
-          .playhead{
-              font-size:2em;
+          .playheadWrap{
               position: relative;
-              cursor:grab;
-
-              .playheadHandle{
-                 width: 16px;
-                 height: 15px;
-                 background: #333;
-                 position: absolute;
-                 bottom: 18px;
+              right:8px;
+              top:10px;
+              .playhead{
+                  font-size:2em;
+                  position: relative;
+                  cursor:grab;
+                  .playheadHandle{
+                     width: 16px;
+                     height: 22px;
+                     background: #333;
+                     position: absolute;
+                     bottom: 17px;
+                     border-top-left-radius: 3px;
+                     border-top-right-radius: 3px;
+                     border-bottom-right-radius: 1px;
+                     border-bottom-left-radius: 1px;
+                     .fa-bars{
+                        color: #555;
+                        font-size: 15px;
+                        transform: rotate(90deg);
+                        left: 2.5px;
+                        top: 2px;
+                        position: absolute;
+                     }
+                  }
               }
           }
           .scrubberPad{
@@ -84,8 +144,10 @@ body{
           .scrubber{
               @include make-lg-column(10);
               padding: 0;
-              right: 18px;
-              top: 9px;
+              right: 10px;
+              border-left:1px solid black;
+              border-bottom: 1px solid #999;
+              background: #ddd;
           }
           .track{
               @include make-row();
@@ -117,8 +179,11 @@ body{
 
                       }
                       .note{
-                        background: rgba(255, 160, 0, .7);
-                        height: 20px;
+                        $c : rgba(255, 160, 0, 1);
+                        border-left: 1px solid darken($c, 10%);
+                        border-top: 1px solid lighten($c, 10%);
+                        background: $c;
+                        height: 21px;
                         position: absolute;
                         z-index: 99;
                         &:hover{
