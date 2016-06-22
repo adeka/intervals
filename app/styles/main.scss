@@ -150,74 +150,84 @@ body{
               background: #ddd;
           }
           .track{
+              padding-right: 1.1em;
               @include make-row();
               .infoBox{
                 @include make-lg-column(2);
                 padding-top: 1em;
                 padding-left: 2em;
               }
-              .lanes{
+              .laneWrap{
                   @include make-lg-column(10);
                   padding-left:0;
+                  overflow-x: scroll;
+                  height: 500px;
+                  position:relative;
+                  left:2px;
+                  .lanes{
+                      .timescale{
+                          height: 20px;
+                          background: #ddd;
+                          position: relative;
+                          border-top: 1px solid rgba(0,0,0,.05);
+                          z-index:0;
+                          .playhead{
+                              width:1px;
+                              height: 20px;
+                              bottom:1px;
+                              z-index: 99;
+                              position: absolute;
+                              background: #333;
+                              -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+                              -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+                               box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
 
-                  .timescale{
-                      height: 20px;
-                      background: #ddd;
-                      position: relative;
-                      border-top: 1px solid rgba(0,0,0,.05);
-                      z-index:0;
-                      .playhead{
-                          width:1px;
-                          height: 20px;
-                          bottom:1px;
-                          z-index: 99;
-                          position: absolute;
-                          background: #333;
-                          -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
-                          -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
-                           box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
-
-                      }
-                      .note{
-                        $c : rgba(255, 160, 0, 1);
-                        border-left: 1px solid darken($c, 10%);
-                        border-top: 1px solid lighten($c, 10%);
-                        background: $c;
-                        height: 21px;
-                        position: absolute;
-                        z-index: 99;
-                        &:hover{
-                          background: rgba(255, 160, 0, 1);
-                        }
-                      }
-                      .bigTick{
-                          height: 20px;
-                          bottom:.1px;
-                          border-left: 1px solid #333;
-                          position: absolute;
-                          &:hover{
-                            background: rgba(130,200,220,.3);
                           }
-                      }
-                      .tick{
-                          height: 20px;
-                          border-left: 1px solid #999;
-                          bottom:.1px;
-                          position: absolute;
-                          &:hover{
-                            background: rgba(130,200,220,.3);
+                          .note{
+                              position: relative;
+                              bottom: 0px;
+                            $c : rgba(255, 160, 0, 1);
+                            border-left: 1px solid darken($c, 10%);
+                            border-bottom: 1px solid darken($c, 10%);
+                            border-top: 1px solid lighten($c, 10%);
+                            background: $c;
+                            height: 21px;
+                            position: absolute;
+                            z-index: 99;
+                            &:hover{
+                              background: rgba(255, 160, 0, 1);
+                            }
                           }
-                      }
-                      .subTick{
-                        position: absolute;
-                        height: 20px;
-                        border-left: 1px solid #ccc;
-                        &:hover{
-                          background: rgba(130,200,220,.3);
-                        }
+                          .bigTick{
+                              height: 20px;
+                              bottom:.1px;
+                              border-left: 1px solid #333;
+                              position: absolute;
+                              &:hover{
+                                background: rgba(130,200,220,.3);
+                              }
+                          }
+                          .tick{
+                              height: 20px;
+                              border-left: 1px solid #999;
+                              bottom:.1px;
+                              position: absolute;
+                              &:hover{
+                                background: rgba(130,200,220,.3);
+                              }
+                          }
+                          .subTick{
+                            position: absolute;
+                            height: 20px;
+                            border-left: 1px solid #ccc;
+                            &:hover{
+                              background: rgba(130,200,220,.3);
+                            }
+                          }
                       }
                   }
               }
+
           }
       }
     }

@@ -3,7 +3,7 @@ class Sequencer extends React.Component {
         super();
         this.state = {
             start : 0,
-            end: 300,
+            end: 3000,
             scrubbing: false
         };
         this.startDrag = this.startDrag.bind(this);
@@ -76,7 +76,7 @@ class Track extends React.Component {
     super();
     this.state = {
     }
-    var fundamental = 261.626;
+    var fundamental = 65.406;
     this.fixedScale = [
         1/1,
         33/32,
@@ -98,9 +98,9 @@ class Track extends React.Component {
     //     this.scale.push(fundamental * this.fixedScale[i]);
     // }
 
-    for(var i=0; i<24; i++){
+    for(var i=0; i<48; i++){
         this.scale.push(fundamental);
-        fundamental = fundamental * Math.pow(2, 1/23);
+        fundamental = fundamental * Math.pow(2, 1/12);
     }
     this.scale.reverse();
   }
@@ -112,10 +112,12 @@ class Track extends React.Component {
         <div className="infoBox">
         {this.props.name}
         </div>
-        <div className="lanes">
-            {this.scale.map(function(result) {
-                return <Notelane pitch={result} w={self.props.w} playing={self.props.playing} elapsed={self.props.elapsed}/>;
-            })}
+        <div className="laneWrap">
+            <div className="lanes">
+                {this.scale.map(function(result) {
+                    return <Notelane pitch={result} w={self.props.w} playing={self.props.playing} elapsed={self.props.elapsed}/>;
+                })}
+            </div>
         </div>
         </div>
     );
@@ -128,7 +130,7 @@ class Notelane extends React.Component {
         super();
         this.state = {
             start : 0,
-            end: 300,
+            end: 3000,
             notes : []
         };
         this.addNote = this.addNote.bind(this);
