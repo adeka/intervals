@@ -3,7 +3,7 @@ class Sequencer extends React.Component {
         super();
         this.state = {
             start : 0,
-            end: 3000,
+            end: 500,
             scrubbing: false
         };
         this.startDrag = this.startDrag.bind(this);
@@ -76,7 +76,7 @@ class Track extends React.Component {
     super();
     this.state = {
     }
-    var fundamental = 65.406;
+    var fundamental = 65.406*2;
     this.fixedScale = [
         1/1,
         33/32,
@@ -98,7 +98,7 @@ class Track extends React.Component {
     //     this.scale.push(fundamental * this.fixedScale[i]);
     // }
 
-    for(var i=0; i<48; i++){
+    for(var i=0; i<12; i++){
         this.scale.push(fundamental);
         fundamental = fundamental * Math.pow(2, 1/12);
     }
@@ -130,7 +130,7 @@ class Notelane extends React.Component {
         super();
         this.state = {
             start : 0,
-            end: 3000,
+            end: 500,
             notes : []
         };
         this.addNote = this.addNote.bind(this);
